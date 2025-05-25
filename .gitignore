@@ -1,0 +1,197 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# OneDrive
+*.tmp
+~$*
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Suricata specific
+suricata.log
+suricata.yaml
+suricata-update/
+rules/
+logs/
+output/
+run/
+*.pid
+
+# Other
+*.bak
+*.swp
+*.swo
+
+# Node.js
+frontend/node_modules/
+backend/node_modules/
+
+# Python virtual environments
+venv/
+ENV/
+.env/
+
+# Databases
+*.db
+backend/logs.db
+backend/test.db
+
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Suricata generated files and configs
+suricata.log
+suricata.yaml
+suricata-update/
+rules/
+logs/
+output/
+run/
+*.pid
+
+# Editor and IDE settings
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# OS/OneDrive temp files
+*.tmp
+~$*
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Test/coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Backup and swap
+*.bak
+*.swp
+*.swo
+
+# Build and dist
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Misc
+*.log
+*.bak
+*.swp
+*.swo
+
+# Docker
+**/Dockerfile
+**/docker-compose.yml
+
+# Reports
+REPORT.md
+
+# Ignore compiled JS bundles (Next.js)
+frontend/.next/
+
+# Ignore lock files (optional, if you want to regenerate them)
+frontend/package-lock.json
+frontend/yarn.lock
+backend/poetry.lock
+backend/Pipfile.lock
