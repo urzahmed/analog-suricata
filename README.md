@@ -1,229 +1,155 @@
-# Log Analyzer and Anomaly Predictor
+# Suricata Log Analysis Dashboard
 
-A full-stack application for monitoring system logs, detecting anomalies using machine learning, and providing actionable insights.
-
-## Features
-
-- Real-time log monitoring using Suricata
-- Anomaly detection using Isolation Forest algorithm
-- Modern web interface built with Next.js
-- RESTful API built with FastAPI
-- Actionable insights for detected anomalies
-- Docker-based deployment
-
-## Prerequisites
-
-- Docker and Docker Compose
-- Node.js 18+ (for local development)
-- Python 3.11+ (for local development)
-- Suricata (for local development without Docker)
+A real-time log analysis dashboard for Suricata IDS/IPS logs, featuring a modern Next.js frontend and FastAPI backend.
 
 ## Project Structure
 
 ```
-.
-├── backend/                 # FastAPI backend
+suricata_project_final_year/
+├── backend/
 │   ├── app/
-│   │   ├── api/            # API endpoints
-│   │   ├── core/           # Core functionality
-│   │   ├── models/         # Database models
-│   │   ├── schemas/        # Pydantic schemas
-│   │   ├── services/       # Business logic
-│   │   └── utils/          # Utility functions
-│   ├── Dockerfile
-│   └── requirements.txt
-├── frontend/               # Next.js frontend
-│   ├── src/
-│   │   ├── app/           # App router pages
-│   │   ├── components/    # React components
-│   │   ├── lib/          # Utility functions
-│   │   └── types/        # TypeScript types
-│   └── Dockerfile
-├── logs/                  # Suricata logs directory
-├── suricata/             # Suricata configuration
-├── docker-compose.yml
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── services/
+│   │   └── utils/
+│   ├── data/
+│   │   └── eve.json
+│   └── logs/
+├── frontend/
+│   ├── app/
+│   ├── components/
+│   ├── public/
+│   └── styles/
 └── README.md
 ```
 
-## Setup
+## Prerequisites
 
-### Option 1: Using Docker (Recommended)
+- Python 3.8 or higher
+- Node.js 16 or higher
+- pnpm (recommended) or npm
+- Git
 
-1. Clone the repository:
+## Backend Setup
+
+1. Navigate to the backend directory:
    ```bash
-   git clone <repository-url>
-   cd log-analyzer
+   cd backend
    ```
 
-2. Create necessary directories:
-   ```bash
-   mkdir -p logs suricata
-   ```
-
-3. Start the services:
-   ```bash
-   docker-compose up -d
-   ```
-
-4. Access the application:
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
-   - API Documentation: http://localhost:8000/docs
-
-### Option 2: Local Development Setup
-
-1. Install Suricata:
-
-   **Windows:**
-   - Download the latest Suricata Windows installer from [OISF's GitHub releases](https://github.com/OISF/suricata/releases)
-   - Run the installer and follow the installation wizard
-   - Add Suricata to your system PATH
-   - Create the following directories:
-     ```bash
-     mkdir -p "C:\Program Files\Suricata\log"
-     mkdir -p "C:\Program Files\Suricata\rules"
-     ```
-
-   **Linux (Ubuntu/Debian):**
-   ```bash
-   sudo add-apt-repository ppa:oisf/suricata-stable
-   sudo apt-get update
-   sudo apt-get install suricata
-   ```
-
-   **macOS:**
-   ```bash
-   brew install suricata
-   ```
-
-2. Configure Suricata:
-   - Copy the default configuration:
-     ```bash
-     # Windows
-     copy "C:\Program Files\Suricata\suricata.yaml" "C:\Program Files\Suricata\suricata.yaml.bak"
-     
-     # Linux/macOS
-     sudo cp /etc/suricata/suricata.yaml /etc/suricata/suricata.yaml.bak
-     ```
-   - Edit the configuration file to enable JSON logging:
-     ```yaml
-     # Windows: C:\Program Files\Suricata\suricata.yaml
-     # Linux/macOS: /etc/suricata/suricata.yaml
-     
-     # Enable JSON logging
-     - eve-log:
-         enabled: yes
-         filetype: regular
-         filename: C:\Program Files\Suricata\log\eve.json
-         types:
-           - alert
-           - flow
-     ```
-
-3. Start Suricata:
+2. Create a virtual environment (optional but recommended):
    ```bash
    # Windows
-   suricata -c "C:\Program Files\Suricata\suricata.yaml" -i <your-interface-name>
-   
-   # Linux/macOS
-   sudo suricata -c /etc/suricata/suricata.yaml -i <your-interface-name>
+   python -m venv venv
+   .\venv\Scripts\activate
+
+   # Linux/Mac
+   python3 -m venv venv
+   source venv/bin/activate
    ```
 
-4. Set up the backend:
+3. Install dependencies:
    ```bash
-   cd backend
-   python -m venv venv
-   source venv/bin/activate  # Linux/macOS
-   venv\Scripts\activate     # Windows
    pip install -r requirements.txt
-   uvicorn app.main:app --reload
    ```
 
-5. Set up the frontend:
+4. Place your Suricata `eve.json` log file in the `backend/data` directory.
+
+## Frontend Setup
+
+1. Navigate to the frontend directory:
    ```bash
    cd frontend
-   npm install
-   ```
-
-6. Start the development servers:
-   ```bash
-   # Terminal 1 (Backend)
-   cd backend
-   uvicorn app.main:app --reload
-   
-   # Terminal 2 (Frontend)
-   cd frontend
-   npm run dev
-   ```
-
-## Development
-
-### Backend
-
-1. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   venv\Scripts\activate     # Windows
    ```
 
 2. Install dependencies:
    ```bash
-   cd backend
-   pip install -r requirements.txt
+   # Using pnpm (recommended)
+   pnpm install
+
+   # Using npm
+   npm install
    ```
 
-3. Run the development server:
+## Running the Application
+
+### Backend
+
+1. Make sure you're in the backend directory and your virtual environment is activated (if using one).
+
+2. Start the FastAPI server:
    ```bash
    uvicorn app.main:app --reload
    ```
 
+   The backend will be available at: http://localhost:8000
+
+   You can access the API documentation at: http://localhost:8000/docs
+
 ### Frontend
 
-1. Install dependencies:
-   ```bash
-   cd frontend
-   npm install
-   ```
+1. Make sure you're in the frontend directory.
 
-2. Run the development server:
+2. Start the Next.js development server:
    ```bash
+   # Using pnpm
+   pnpm dev
+
+   # Using npm
    npm run dev
    ```
 
+   The frontend will be available at: http://localhost:3000
+
+## Features
+
+- Real-time log analysis
+- Protocol distribution visualization
+- Alert type analysis
+- Threat detection and analysis
+- Security suggestions
+- Traffic pattern analysis
+- High severity alert monitoring
+
 ## API Endpoints
 
-- `GET /api/logs` - Get all logs
-- `GET /api/logs/anomalies` - Get only anomalous logs
-- `POST /api/suggest-action` - Get action suggestion for an anomaly
-- `POST /api/analyze-logs` - Trigger log analysis
+- `GET /api/v1/analyze`: Get analysis of Suricata logs
+- `GET /`: API information and documentation
+
+## Development
+
+### Backend Development
+
+- The backend is built with FastAPI
+- Main application code is in `backend/app/main.py`
+- API routes are defined in `backend/app/api/endpoints.py`
+- Log analysis logic is in `backend/app/services/`
+
+### Frontend Development
+
+- The frontend is built with Next.js 13+ and TypeScript
+- Uses Tailwind CSS for styling
+- Main page components are in `frontend/app/`
+- Reusable components are in `frontend/components/`
 
 ## Troubleshooting
 
-### Suricata Issues
+### Common Issues
 
-1. **Cannot find network interface:**
-   - List available interfaces:
-     ```bash
-     # Windows
-     ipconfig /all
-     
-     # Linux
-     ip addr
-     
-     # macOS
-     ifconfig
-     ```
-   - Use the correct interface name in the Suricata command
+1. **Backend Connection Error**
+   - Ensure the backend server is running on port 8000
+   - Check if the virtual environment is activated
+   - Verify all dependencies are installed
 
-2. **Permission denied:**
-   - Run Suricata with administrator/root privileges
-   - Ensure the log directory is writable
+2. **Frontend Build Issues**
+   - Clear the `.next` directory and node_modules
+   - Run `pnpm install` or `npm install` again
+   - Check for any TypeScript errors
 
-3. **No logs being generated:**
-   - Check Suricata configuration file
-   - Verify the log directory path
-   - Ensure the interface is capturing traffic
+3. **Missing Log Data**
+   - Ensure `eve.json` is present in `backend/data/`
+   - Verify the log file format is correct
+   - Check file permissions
 
 ## Contributing
 

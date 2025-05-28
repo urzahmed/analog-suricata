@@ -7,8 +7,8 @@ import { Navbar } from "@/components/navbar"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Suricata Dashboard",
-  description: "Real-time network traffic analysis dashboard",
+  title: "Ana-Log | Anamoly Detection",
+  description: "Real-time network traffic analysis dashboard using FastAPI, Suricata",
 }
 
 export default function RootLayout({
