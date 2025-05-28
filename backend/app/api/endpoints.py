@@ -6,15 +6,33 @@ from ..models.log import Log
 from ..schemas.log import Log as LogSchema, AnomalyAction
 from ..services.log_processor import LogProcessor
 from ..services.anomaly_detector import AnomalyDetector
+import logging
 
 router = APIRouter()
 log_processor = LogProcessor()
 anomaly_detector = AnomalyDetector()
+logger = logging.getLogger(__name__)
 
 @router.get("/logs", response_model=List[LogSchema])
 async def get_logs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """Get all logs with pagination."""
+    # First try to get logs from database
     logs = db.query(Log).offset(skip).limit(limit).all()
+    
+    # If no logs in database, read from eve.json
+    if not logs:
+        logger.info("No logs in database, reading from eve.json")
+        raw_logs = await log_processor.read_logs(limit)
+        
+        # Save logs to database
+        for log_data in raw_logs:
+            log = Log(**log_data)
+            db.add(log)
+        db.commit()
+        
+        # Fetch the newly saved logs
+        logs = db.query(Log).offset(skip).limit(limit).all()
+    
     return logs
 
 @router.get("/logs/anomalies", response_model=List[LogSchema])

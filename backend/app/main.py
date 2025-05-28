@@ -13,6 +13,12 @@ from typing import List, Dict, Any
 import json
 import os
 from datetime import datetime
+import logging
+from .services.log_processor import LogProcessor
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -38,13 +44,44 @@ app.include_router(router, prefix="/api")
 # Create scheduler
 scheduler = AsyncIOScheduler()
 
-# Initialize anomaly detection service
+# Initialize services
 anomaly_detector = AnomalyDetectionService()
+log_processor = LogProcessor()
+
+async def sync_logs():
+    """Periodically sync logs from eve.json to database."""
+    try:
+        logger.info("Starting log sync from eve.json")
+        db = next(get_db())
+        
+        # Read new logs
+        new_logs = await log_processor.read_logs()
+        logger.info(f"Read {len(new_logs)} logs from eve.json")
+        
+        # Save to database
+        for log_data in new_logs:
+            # Check if log already exists
+            existing = db.query(Log).filter(
+                Log.src_ip == log_data['src_ip'],
+                Log.dest_ip == log_data['dest_ip'],
+                Log.timestamp == log_data.get('timestamp', datetime.utcnow())
+            ).first()
+            
+            if not existing:
+                log = Log(**log_data)
+                db.add(log)
+        
+        db.commit()
+        logger.info("Log sync completed successfully")
+    except Exception as e:
+        logger.error(f"Error syncing logs: {str(e)}")
 
 @app.on_event("startup")
 async def startup_event():
     # Schedule log analysis every 5 minutes
     scheduler.add_job(analyze_logs, 'interval', minutes=5)
+    # Schedule log sync every minute
+    scheduler.add_job(sync_logs, 'interval', minutes=1)
     scheduler.start()
 
 @app.on_event("shutdown")

@@ -80,8 +80,8 @@ A full-stack application for monitoring system logs, detecting anomalies using m
    - Add Suricata to your system PATH
    - Create the following directories:
      ```bash
-     mkdir -p C:\Program Files\Suricata\logs
-     mkdir -p C:\Program Files\Suricata\rules
+     mkdir -p "C:\Program Files\Suricata\log"
+     mkdir -p "C:\Program Files\Suricata\rules"
      ```
 
    **Linux (Ubuntu/Debian):**
@@ -114,7 +114,7 @@ A full-stack application for monitoring system logs, detecting anomalies using m
      - eve-log:
          enabled: yes
          filetype: regular
-         filename: eve.json
+         filename: C:\Program Files\Suricata\log\eve.json
          types:
            - alert
            - flow
@@ -136,6 +136,7 @@ A full-stack application for monitoring system logs, detecting anomalies using m
    source venv/bin/activate  # Linux/macOS
    venv\Scripts\activate     # Windows
    pip install -r requirements.txt
+   uvicorn app.main:app --reload
    ```
 
 5. Set up the frontend:
